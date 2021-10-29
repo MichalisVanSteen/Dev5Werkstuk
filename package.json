@@ -1,0 +1,24 @@
+{
+  "name": "dev5werkstuk",
+  "version": "1.0.0",
+  "description": "Werkstuk Development 5",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MichalisVanSteen/Dev5Werkstuk.git"
+  },
+  "author": "Michalis Van Steen",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MichalisVanSteen/Dev5Werkstuk/issues"
+  },
+  "homepage": "https://github.com/MichalisVanSteen/Dev5Werkstuk#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "jest": "^27.3.1",
+    "nodemon": "^2.0.14"
+  }
+}
