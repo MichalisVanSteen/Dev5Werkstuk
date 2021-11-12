@@ -1,7 +1,7 @@
 const {
     string
 } = require("yargs");
-const helpers = require("../../../index")
+const helpers = require("../index")
 
 test("Helper function to check a string length", () => {
     expect(helpers.checkStringLength()).toBeFalsy();

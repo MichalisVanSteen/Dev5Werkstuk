@@ -1,27 +1,23 @@
-//Express setup
+//Database connection
 
 const pg = require('knex')({
+
   client: 'pg',
-  connection: process.env.PG_CONNECTION_STRING,
+
   searchPath: ['knex', 'public'],
+
+  connection: process.env.PG_CONNECTION_STRING ? process.env.PG_CONNECTION_STRING : 'postgres://admin:admin@localhost:5432/producenten'
+
 });
 
-// const express = require('express');
-// const app = express();
-// const port = process.env.PORT || 5543;
-// const bgRouter = express.Router();
+//Express setup
+const express = require('express');
+const app = express();
+const port = process.env.PORT || 5543;
+const bgRouter = express.Router();
 
-// const {
-//     Client
-// } = require('pg')
-// const client = new Client({
-//     host: "localhost",
-//     user: "postgres",
-//     port: 3000,
-//     password: "admin",
-//     database: "postgres"
-// })
-// client.connect();
+
+
 
 //Endpoints
 

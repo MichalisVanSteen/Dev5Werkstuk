@@ -2,10 +2,9 @@ version: "3.9"
 services:
 
   api:
-    build: ./
-    image: crshlab/api_test:0.1
+    build: ./api
     ports:
-      - "3000:${PORT}"
+      - "6900:${PORT}"
     environment:
      - PG_CON=postgress://${POSTGRES_USER}:${POSTGRES_PASSWORD}@pg:5432/${POSTGRES_DB}
      - PORT
