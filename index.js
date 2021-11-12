@@ -88,6 +88,19 @@ async function UpdateProducenten(req, res) {
     res.send("Succesfully updated!")
 }
 
+//Testing
+
+app.post('/addUser', (req, res) => {
+    client.query(
+            "INSERT INTO users(id, naam)VALUES(gen_random_uuid(), 'Jeff')",
+            (err, res) => {
+                console.log(err, res);
+                client.end();
+            }
+        );
+        res.send("Succesfully added")
+    });
+
 //Helpers
 
 function checkStringLength(str) {
