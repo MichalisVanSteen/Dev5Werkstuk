@@ -1,26 +1,27 @@
 //Express setup
-const express = require('express');
-const app = express();
-const port = process.env.PORT || 5543;
-const bgRouter = express.Router();
-
-const {
-    Client
-} = require('pg')
-const client = new Client({
-    host: "localhost",
-    user: "postgres",
-    port: 3000,
-    password: "admin",
-    database: "postgres"
-})
-client.connect();
 
 const pg = require('knex')({
   client: 'pg',
   connection: process.env.PG_CONNECTION_STRING,
   searchPath: ['knex', 'public'],
 });
+
+// const express = require('express');
+// const app = express();
+// const port = process.env.PORT || 5543;
+// const bgRouter = express.Router();
+
+// const {
+//     Client
+// } = require('pg')
+// const client = new Client({
+//     host: "localhost",
+//     user: "postgres",
+//     port: 3000,
+//     password: "admin",
+//     database: "postgres"
+// })
+// client.connect();
 
 //Endpoints
 
@@ -94,7 +95,7 @@ module.exports = {
 //Functions Endpoints
 
 function RecieveData(req, res) {
-    client.query(`Select * from producenten` && `Select * from categorie` && `Select * from speelgoed`, (err, res) => {
+    client.query(`Select * from producenten`, (err, res) => {
         if (!err) {
             console.log(res.rows);
         } else {
