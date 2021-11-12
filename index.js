@@ -10,11 +10,17 @@ const {
 const client = new Client({
     host: "localhost",
     user: "postgres",
-    port: 6942,
+    port: 3000,
     password: "admin",
     database: "postgres"
 })
 client.connect();
+
+const pg = require('knex')({
+  client: 'pg',
+  connection: process.env.PG_CONNECTION_STRING,
+  searchPath: ['knex', 'public'],
+});
 
 //Endpoints
 
