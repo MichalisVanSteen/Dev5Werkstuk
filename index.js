@@ -26,19 +26,52 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(bodyParser.json());
 
-bgRouter.route('/producenten')
+//Tabel
+  bgRouter.route('/producenten')
     .get((req, res) => {
         RecieveData(req,res)
-    })
+    });
  
+  bgRouter.route('/categorie')
+    .get((req, res) => {
+        RecieveData(req,res)
+  });
+
+  bgRouter.route('/speelgoed')
+    .get((req, res) => {
+        RecieveData(req,res)
+  });    
+
+//Update
 bgRouter.route('/updateProducenten/:id')
     .patch((req, res) => {
-    UpdateUsers(req, res);     
+    UpdateProducenten(req, res);     
 });
 
+bgRouter.route('/updateCategorie/:id')
+    .patch((req, res) => {
+    UpdateCategorie(req, res);     
+});
+
+bgRouter.route('/updateSpeelgoed/:id')
+    .patch((req, res) => {
+    UpdateSpeelgoed(req, res);     
+});
+
+//Delete
 bgRouter.route('/deleteProducenten/:id')
     .delete((req, res) => {
-    deleteUser(res,res);
+    deleteProducenten(res,res);
+});
+
+bgRouter.route('/deleteCategorie/:id')
+    .delete((req, res) => {
+    deleteCategorie(res,res);
+});
+
+bgRouter.route('/deleteSpeelgoed/:id')
+    .delete((req, res) => {
+    deleteSpeelgoed(res,res);
 });
 
 app.use('/api', bgRouter);
@@ -55,7 +88,7 @@ module.exports = {
 //Functions Endpoints
 
 function RecieveData(req, res) {
-    client.query(`Select * from producenten`, (err, res) => {
+    client.query(`Select * from producenten` && `Select * from categorie` && `Select * from speelgoed`, (err, res) => {
         if (!err) {
             console.log(res.rows);
         } else {
