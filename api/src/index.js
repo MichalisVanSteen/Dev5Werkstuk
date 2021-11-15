@@ -13,7 +13,7 @@ const pg = require('knex')({
 //Express setup
 const express = require('express');
 const app = express();
-const port = process.env.PORT || 6900;
+const port = process.env.APIPORT || 6900;
 const bgRouter = express.Router();
 
 async function createTable() {
@@ -25,139 +25,78 @@ async function createTable() {
         });
       }
     });
+    producentDataToevoegen();
 }
 
 createTable();
 
 
+
 //Endpoints
 
 const bodyParser = require('body-parser');
-const { request } = require('http');
+//const { request } = require('http');
 
 app.use(bodyParser.urlencoded({
     extended: true
 }));
 app.use(bodyParser.json());
 
-// exports.up = function(knex) {
-//   return knex.schema
-//     .createTable('producenten', function(table){
-//       table.increments('id');
-//       table.string('name', 255).notNullable();
-//       table.string('email', 255);
-//       table.timestamps();
-//     });
-// };
-
-app.get('/producenten/:producentenId', (req, res) => {
-  res.send(req.params.producentenId)
-})
-
-app.route('/speelgoed')
-  .get(function (req, res) {
-    res.send('Get a random toy')
-  })
-  .post(function (req, res) {
-    res.send('Add a toy')
-  })
-  .put(function (req, res) {
-    res.send('Update the toy')
-  })
-
-//Tabel
-  // bgRouter.route('/producenten')
-  //   .get((req, res) => {
-  //       RecieveData(req,res)
-  //   });
- 
-  // bgRouter.route('/categorie')
-  //   .get((req, res) => {
-  //       RecieveData(req,res)
-  // });
-
-  // bgRouter.route('/speelgoed')
-  //   .get((req, res) => {
-  //       RecieveData(req,res)
-  // });    
+//Get
+bgRouter.route('/producenten')
+    .get((req, res) => {
+      producentDataOphalen().then((data) => {
+        console.log(data);
+        res.send("Succes!")
+      });
+      
+});  
 
 //Update
-// bgRouter.route('/updateProducenten/:id')
-//     .patch((req, res) => {
-//     UpdateProducenten(req, res);     
-// });
-
-// bgRouter.route('/updateCategorie/:id')
-//     .patch((req, res) => {
-//     UpdateCategorie(req, res);     
-// });
-
-// bgRouter.route('/updateSpeelgoed/:id')
-//     .patch((req, res) => {
-//     UpdateSpeelgoed(req, res);     
-// });
+bgRouter.route('/updateProducenten/:id')
+    .patch((req, res) => {
+         producentDataAanpassen(req.params.id);
+         res.send("Data aanpassen gelukt!")
+});
+   
 
 //Delete
-// bgRouter.route('/deleteProducenten/:id')
-//     .delete((req, res) => {
-//     deleteProducenten(res,res);
-// });
+bgRouter.route('/deleteProducenten/:id')
+    .delete((req, res) => {
+      producentDataVerwijderen(req.params.id);
+      res.send("Data verwijderen gelukt!")
+});
 
-// bgRouter.route('/deleteCategorie/:id')
-//     .delete((req, res) => {
-//     deleteCategorie(res,res);
-// });
 
-// bgRouter.route('/deleteSpeelgoed/:id')
-//     .delete((req, res) => {
-//     deleteSpeelgoed(res,res);
-// });
-
-app.use('/api', bgRouter);
+app.use('/backend', bgRouter);
 
 app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`);
 
 });
 
+app.get('/', (req, res) => {
+  res.send("use /backend to go further")
+});
+
 module.exports = {
     port
 }
 
-//Functions Endpoints
-
-function RecieveData(req, res) {
-    client.query(`Select * from producenten`, (err, res) => {
-        if (!err) {
-            console.log(res.rows);
-        } else {
-            console.log(err.message);
-        }
-    });
-    res.send("succesfully read");
+async function producentDataOphalen() {
+  return await pg.select('id', 'naam').from('producenten');
 }
 
-async function deleteProducenten(req,res) {
-    await client.query(
-        `DELETE FROM public.producenten WHERE "id" = '${req.params.id}';`,
-        (err, res) => {
-            console.log(err, res);
-        }
-    );
-    res.send("succefully deleted!")
+async function producentDataToevoegen() {
+  return await pg.table('producenten').insert({naam: "producent"});
 }
 
-async function UpdateProducenten(req, res) {
-    request.post
-    await client.query(
-        `UPDATE public.producenten
-        SET "naam" = '${req.body.naam}'
-        WHERE "id" = '${req.params.id}'`,
-        (err, res) => {
-            console.log(err, res);
-        }
-    );
-    res.send("Succesfully updated!")
+async function producentDataAanpassen(id) {
+  return await pg.table('producenten').where('id', '=', id).update('naam', "NewProducent");
+}
+
+async function producentDataVerwijderen(id) {
+  return await pg.table('producenten').where('id', '=', id).del();
 }
 
 //Helpers
