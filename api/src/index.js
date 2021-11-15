@@ -6,17 +6,28 @@ const pg = require('knex')({
 
   searchPath: ['knex', 'public'],
 
-  connection: process.env.PG_CONNECTION_STRING ? process.env.PG_CONNECTION_STRING : 'postgres://admin:admin@localhost:5432/producenten'
+  connection: process.env.PG_CONNECTION_STRING ? process.env.PG_CONNECTION_STRING : 'postgres://admin:admin@localhost:6900/producenten'
 
 });
 
 //Express setup
 const express = require('express');
 const app = express();
-const port = process.env.PORT || 5543;
+const port = process.env.PORT || 6900;
 const bgRouter = express.Router();
 
+async function createTable() {
+  await pg.schema.hasTable('producenten').then(function(exists) {
+      if (!exists) {
+        return pg.schema.createTable('producenten', function(t) {
+          t.increments('id').primary();
+          t.string('naam', 100);
+        });
+      }
+    });
+}
 
+createTable();
 
 
 //Endpoints
@@ -29,53 +40,78 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(bodyParser.json());
 
-//Tabel
-  bgRouter.route('/producenten')
-    .get((req, res) => {
-        RecieveData(req,res)
-    });
- 
-  bgRouter.route('/categorie')
-    .get((req, res) => {
-        RecieveData(req,res)
-  });
+// exports.up = function(knex) {
+//   return knex.schema
+//     .createTable('producenten', function(table){
+//       table.increments('id');
+//       table.string('name', 255).notNullable();
+//       table.string('email', 255);
+//       table.timestamps();
+//     });
+// };
 
-  bgRouter.route('/speelgoed')
-    .get((req, res) => {
-        RecieveData(req,res)
-  });    
+app.get('/producenten/:producentenId', (req, res) => {
+  res.send(req.params.producentenId)
+})
+
+app.route('/speelgoed')
+  .get(function (req, res) {
+    res.send('Get a random toy')
+  })
+  .post(function (req, res) {
+    res.send('Add a toy')
+  })
+  .put(function (req, res) {
+    res.send('Update the toy')
+  })
+
+//Tabel
+  // bgRouter.route('/producenten')
+  //   .get((req, res) => {
+  //       RecieveData(req,res)
+  //   });
+ 
+  // bgRouter.route('/categorie')
+  //   .get((req, res) => {
+  //       RecieveData(req,res)
+  // });
+
+  // bgRouter.route('/speelgoed')
+  //   .get((req, res) => {
+  //       RecieveData(req,res)
+  // });    
 
 //Update
-bgRouter.route('/updateProducenten/:id')
-    .patch((req, res) => {
-    UpdateProducenten(req, res);     
-});
+// bgRouter.route('/updateProducenten/:id')
+//     .patch((req, res) => {
+//     UpdateProducenten(req, res);     
+// });
 
-bgRouter.route('/updateCategorie/:id')
-    .patch((req, res) => {
-    UpdateCategorie(req, res);     
-});
+// bgRouter.route('/updateCategorie/:id')
+//     .patch((req, res) => {
+//     UpdateCategorie(req, res);     
+// });
 
-bgRouter.route('/updateSpeelgoed/:id')
-    .patch((req, res) => {
-    UpdateSpeelgoed(req, res);     
-});
+// bgRouter.route('/updateSpeelgoed/:id')
+//     .patch((req, res) => {
+//     UpdateSpeelgoed(req, res);     
+// });
 
 //Delete
-bgRouter.route('/deleteProducenten/:id')
-    .delete((req, res) => {
-    deleteProducenten(res,res);
-});
+// bgRouter.route('/deleteProducenten/:id')
+//     .delete((req, res) => {
+//     deleteProducenten(res,res);
+// });
 
-bgRouter.route('/deleteCategorie/:id')
-    .delete((req, res) => {
-    deleteCategorie(res,res);
-});
+// bgRouter.route('/deleteCategorie/:id')
+//     .delete((req, res) => {
+//     deleteCategorie(res,res);
+// });
 
-bgRouter.route('/deleteSpeelgoed/:id')
-    .delete((req, res) => {
-    deleteSpeelgoed(res,res);
-});
+// bgRouter.route('/deleteSpeelgoed/:id')
+//     .delete((req, res) => {
+//     deleteSpeelgoed(res,res);
+// });
 
 app.use('/api', bgRouter);
 
@@ -124,19 +160,6 @@ async function UpdateProducenten(req, res) {
     res.send("Succesfully updated!")
 }
 
-//Testing
-
-// app.post('/addProducenten', (req, res) => {
-//     client.query(
-//             "INSERT INTO producenten(id, naam)VALUES(gen_random_uuid(), 'Hasbro')",
-//             (err, res) => {
-//                 console.log(err, res);
-//                 client.end();
-//             }
-//         );
-//         res.send("Succesfully added")
-//     });
-
 //Helpers
 
 // function checkStringLength(str) {
@@ -147,69 +170,69 @@ async function UpdateProducenten(req, res) {
 
 
 
-const helpers = {
-    /**
-     * checks if string length is smaller than or equal to 10
-     * @param {string} str the user given string 
-     * @returns false if not a string or too long, otherwise string itself
-     */
-    checkStringLength(str) {
-      return str && typeof str == "string" && str.length <= 10 ? str : false;
-    },
+// const helpers = {
+//     /**
+//      * checks if string length is smaller than or equal to 10
+//      * @param {string} str the user given string 
+//      * @returns false if not a string or too long, otherwise string itself
+//      */
+//     checkStringLength(str) {
+//       return str && typeof str == "string" && str.length <= 10 ? str : false;
+//     },
   
-    /**
-     * check if body send by endpoint is in order
-     * @param {object} body 
-     * @returns {object} body if all is capitalised and shortened, or false if something missing
-     */
-    bodyCheck(body) {
-      if(body && body.title && body.imageURL && body.excerpt) {
-        const { title, imageURL, excerpt} = body;
-        if(title.length < 10 && this.checkIfURL(imageURL)) {
-          return {
-            ...body,
-            title: this.capitalise(title),
-            excerpt: this.shortenText(excerpt, 20)
-          }
-        }
-      }
-      return false;
-    },
+//     /**
+//      * check if body send by endpoint is in order
+//      * @param {object} body 
+//      * @returns {object} body if all is capitalised and shortened, or false if something missing
+//      */
+//     bodyCheck(body) {
+//       if(body && body.title && body.imageURL && body.excerpt) {
+//         const { title, imageURL, excerpt} = body;
+//         if(title.length < 10 && this.checkIfURL(imageURL)) {
+//           return {
+//             ...body,
+//             title: this.capitalise(title),
+//             excerpt: this.shortenText(excerpt, 20)
+//           }
+//         }
+//       }
+//       return false;
+//     },
     
-    /**
-     * shorten text to a certain length, add ... at the end
-     * @param {*} text input text
-     * @param {*} length desired length (account for the "...")
-     * @returns string shortened with "..." at end
-     */
-    shortenText(text, length) {
-      if(text) {
-        return text.length > length ? text.substring(0, length)+"..." : text;
-      }
-      return false;
-    },
+//     /**
+//      * shorten text to a certain length, add ... at the end
+//      * @param {*} text input text
+//      * @param {*} length desired length (account for the "...")
+//      * @returns string shortened with "..." at end
+//      */
+//     shortenText(text, length) {
+//       if(text) {
+//         return text.length > length ? text.substring(0, length)+"..." : text;
+//       }
+//       return false;
+//     },
   
-    /**
-     * capitalise the first letter of a given string
-     * @param {string} string input string
-     * @returns the capitalised string
-     */
-    capitalise(string) {
-      return string ? string.charAt(0).toUpperCase() + string.slice(1) : false;
-    },
+//     /**
+//      * capitalise the first letter of a given string
+//      * @param {string} string input string
+//      * @returns the capitalised string
+//      */
+//     capitalise(string) {
+//       return string ? string.charAt(0).toUpperCase() + string.slice(1) : false;
+//     },
   
-    /**
-     * check if a given string is a url
-     * @param {string} url 
-     * @returns true if url, false if not
-     */
-    checkIfURL(url) {
-      if(url) {
-        const regex = /[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/g;
-        return regex.test(url);
-      }
-      return false;
-    }
-  }
+//     /**
+//      * check if a given string is a url
+//      * @param {string} url 
+//      * @returns true if url, false if not
+//      */
+//     checkIfURL(url) {
+//       if(url) {
+//         const regex = /[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/g;
+//         return regex.test(url);
+//       }
+//       return false;
+//     }
+//   }
   
-  module.exports = helpers;
+//   module.exports = helpers;
