@@ -2,13 +2,13 @@ FROM node
 
 WORKDIR /usr/app 
 
-COPY package*.json .
+COPY package*.json ./
 
 RUN npm i
 
 EXPOSE 6900
 
-COPY . .
+COPY ./ ./
 
 CMD ["npm", "start"]
 #CMD ["nodemon"]
