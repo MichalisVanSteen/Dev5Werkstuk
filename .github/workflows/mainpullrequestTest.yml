@@ -31,10 +31,10 @@ jobs:
 
       # Runs a single command using the runners shell
       - name: Build docker container
-        run: docker --compose build
+        run: docker-compose build
         
       - name: Run docker container
-        run: docker --compose up -d
+        run: docker-compose up -d
         
       - name: Npm install
         run: |
