@@ -12,6 +12,8 @@ on:
     
     
 env:
+  PORT: 5432
+  APIPORT: 6900
   POSTGRES_HOST: pg
   POSTGRES_PASSWORD: admin
   POSTGRES_USER: admin
