@@ -2,8 +2,19 @@
 Werkstuk van Development 5
 
 How to run this project?
+
 Run docker-compose up --build -d
 Advice: Run this while you are in the api folder
+
+Create an .env file in the api folder
+Type the following code inside the .env file
+
+PORT=5432
+APIPORT=6900
+POSTGRES_HOST=pg
+POSTGRES_PASSWORD=admin
+POSTGRES_USER=admin
+POSTGRES_DB=producenten
 
 Routes:
 

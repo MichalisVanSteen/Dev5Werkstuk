@@ -27,17 +27,17 @@ async function createTable() {
             t.string('bedrijfsnaam', 100);
           })
           .createTable('speelgoed', function (t) {
-            t.increments('id').primary();
+            t.increments('speelgoedId').primary();
             t.string('naam', 100);
             t.integer('prijs', 4);
-            t.integer('bedrijfsnaam', 1).unsigned().references('producentId').inTable('producenten');
+            t.integer('bedrijfsnaam', 100).unsigned().references('producentId').inTable('producenten');
           }).then();
       }
     });
     if (alreadyCreatedTable) {
       await createProducentenPostgressData();
       for (let index = 0; index < 5; index++) {
-        createPostgressData();
+        producentDataToevoegen();
       }
     }
     producentDataToevoegen();
@@ -68,7 +68,7 @@ bgRouter.route('/producenten')
 });  
 
 //Update
-bgRouter.route('/updateProducenten/:id')
+bgRouter.route('/updateProducenten/:producentId')
     .patch((req, res) => {
          producentDataAanpassen(req.params.id);
          res.send("Data aanpassen gelukt!")
@@ -76,7 +76,7 @@ bgRouter.route('/updateProducenten/:id')
    
 
 //Delete
-bgRouter.route('/deleteProducenten/:id')
+bgRouter.route('/deleteProducenten/:producentId')
     .delete((req, res) => {
       producentDataVerwijderen(req.params.id);
       res.send("Data verwijderen gelukt!")
@@ -99,19 +99,36 @@ module.exports = {
     app
 }
 
+//CRUD table producenten
 async function producentDataOphalen() {
-  return await pg.select('id', 'naam').from('producenten');
+  return await pg.select('producentId', 'bedrijfsnaam').from('producenten');
 }
 
 async function producentDataToevoegen() {
-  return await pg.table('producenten').insert({naam: "producent"});
+  return await pg.table('producenten').insert({bedrijfsnaam: "producent"});
 }
 
-async function producentDataAanpassen(id) {
-  return await pg.table('producenten').where('id', '=', id).update('naam', "NewProducent");
+async function producentDataAanpassen(producentId) {
+  return await pg.table('producenten').where('producentId', '=', producentId).update('bedrijfsnaam', "NewProducent");
 }
 
-async function producentDataVerwijderen(id) {
-  return await pg.table('producenten').where('id', '=', id).del();
+async function producentDataVerwijderen(producentId) {
+  return await pg.table('producenten').where('producentId', '=', producentId).del();
 }
 
+//CRUD table speelgoed
+async function speelgoedDataOphalen() {
+  return await pg.select('speelgoedId', 'prijs').from('speelgoed');
+}
+
+async function speelgoedDataToevoegen() {
+  return await pg.table('speeldgoed').insert({naam: "speelgoed"});
+}
+
+async function speelgoedDataAanpassen(speelgoedId) {
+  return await pg.table('speelgoed').where('speelgoedId', '=', speelgoedId).update('naam', "NewSpeelgoed" & 'prijs', 50);
+}
+
+async function speelgoedDataVerwijderen(speelgoedId) {
+  return await pg.table('speelgoed').where('speelgoedId', '=', speelgoedId).del();
+}
