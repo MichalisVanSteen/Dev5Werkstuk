@@ -16,15 +16,30 @@ const app = express();
 const port = process.env.APIPORT || 6900;
 const bgRouter = express.Router();
 
+let alreadyCreatedTable = false;
 async function createTable() {
   await pg.schema.hasTable('producenten').then(function(exists) {
       if (!exists) {
-        return pg.schema.createTable('producenten', function(t) {
-          t.increments('id').primary();
-          t.string('naam', 100);
-        });
+        alreadyCreatedTable = true;
+        return pg.schema
+          .createTable('producenten', function(t) {
+            t.increments('producentId').primary();
+            t.string('bedrijfsnaam', 100);
+          })
+          .createTable('speelgoed', function (t) {
+            t.increments('id').primary();
+            t.string('naam', 100);
+            t.integer('prijs', 4);
+            t.integer('bedrijfsnaam', 1).unsigned().references('producentId').inTable('producenten');
+          }).then();
       }
     });
+    if (alreadyCreatedTable) {
+      await createProducentenPostgressData();
+      for (let index = 0; index < 5; index++) {
+        createPostgressData();
+      }
+    }
     producentDataToevoegen();
 }
 
