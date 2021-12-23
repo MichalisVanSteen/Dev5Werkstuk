@@ -127,8 +127,8 @@ async function producentDataToevoegen(naam) {
   return await pg.table('producenten').insert({bedrijfsnaam: naam});
 }
 
-async function producentDataAanpassen(producentId) {
-  return await pg.table('producenten').where('producentId', '=', producentId).update('bedrijfsnaam', "NewProducent");
+async function producentDataAanpassen(producentId, newbedrijfsnaam) {
+  return await pg.table('producenten').where('producentId', '=', producentId).update('bedrijfsnaam', newbedrijfsnaam);
 }
 
 async function producentDataVerwijderen(producentId) {
@@ -144,8 +144,8 @@ async function speelgoedDataToevoegen(naam,prijs, producent) {
   return await pg.table('speelgoed').insert({naam: naam, prijs: prijs, bedrijfsnaam: producent});
 }
 
-async function speelgoedDataAanpassen(speelgoedId) {
-  return await pg.table('speelgoed').where('speelgoedId', '=', speelgoedId).update('naam', "NewSpeelgoed" & 'prijs', 50);
+async function speelgoedDataAanpassen(speelgoedId, newnaam, newprijs) {
+  return await pg.table('speelgoed').where('speelgoedId', '=', speelgoedId).update('naam', newnaam & 'prijs', newprijs);
 }
 
 async function speelgoedDataVerwijderen(speelgoedId) {
