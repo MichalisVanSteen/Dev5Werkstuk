@@ -73,12 +73,16 @@ bgRouter.route('/speelgoed')
 });  
 
 //Update
-bgRouter.route('/updateProducenten/:producentId')
+bgRouter.route('/updateProducenten/:producentId/:newvalue')
     .patch((req, res) => {
-         producentDataAanpassen(req.params.id);
+         producentDataAanpassen(req.params.producentId, req.params.newvalue);
          res.send("Data aanpassen gelukt!")
 });
-   
+bgRouter.route('/updateSpeelgoed/:speelgoedId/:newprice')
+    .patch((req, res) => {
+         speelgoedDataAanpassen(req.params.speelgoedId, req.params.newprice);
+         res.send("Data aanpassen gelukt!")
+});
 
 //Delete
 bgRouter.route('/deleteProducenten/:producentId')
@@ -144,8 +148,10 @@ async function speelgoedDataToevoegen(naam,prijs, producent) {
   return await pg.table('speelgoed').insert({naam: naam, prijs: prijs, bedrijfsnaam: producent});
 }
 
-async function speelgoedDataAanpassen(speelgoedId, newnaam, newprijs) {
-  return await pg.table('speelgoed').where('speelgoedId', '=', speelgoedId).update('naam', newnaam & 'prijs', newprijs);
+async function speelgoedDataAanpassen(speelgoedId, newprijs) {
+  return await pg.table('speelgoed').where('speelgoedId', '=', speelgoedId).update('prijs', newprijs);
+
+
 }
 
 async function speelgoedDataVerwijderen(speelgoedId) {
