@@ -39,6 +39,9 @@ async function createTable() {
       await producentDataToevoegen("777");
       await producentDataToevoegen("Jumbo");
       await speelgoedDataToevoegen("testspeemlgoed", 21, 1);
+      await speelgoedDataToevoegen("testspeelgoed1", 221, 1);
+      await speelgoedDataToevoegen("testspeelgoed2", 11, 3);
+      await speelgoedDataToevoegen("testspeelgoed3", 201, 2);
     }
 }
 
@@ -87,7 +90,12 @@ bgRouter.route('/updateSpeelgoed/:speelgoedId/:newprice')
 //Delete
 bgRouter.route('/deleteProducenten/:producentId')
     .delete((req, res) => {
-      producentDataVerwijderen(req.params.id);
+      producentDataVerwijderen(req.params.producentId);
+      res.send("Data verwijderen gelukt!")
+});
+bgRouter.route('/deleteSpeelgoed/:speelgoedId')
+    .delete((req, res) => {
+      speelgoedDataVerwijderen(req.params.speelgoedId);
       res.send("Data verwijderen gelukt!")
 });
 
