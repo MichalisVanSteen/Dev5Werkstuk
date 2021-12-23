@@ -62,8 +62,14 @@ bgRouter.route('/producenten')
       producentDataOphalen().then((data) => {
         console.log(data);
         res.send("Succes!")
-      });
-      
+      });     
+});  
+bgRouter.route('/speelgoed')
+    .get((req, res) => {
+      speelgoedDataOphalen().then((data) => {
+        console.log(data);
+        res.send("Succes!")
+      });     
 });  
 
 //Update
@@ -131,7 +137,7 @@ async function producentDataVerwijderen(producentId) {
 
 //CRUD table speelgoed
 async function speelgoedDataOphalen() {
-  return await pg.select('speelgoedId', 'prijs').from('speelgoed');
+  return await pg.select('speelgoedId', 'naam' ,'prijs').from('speelgoed');
 }
 
 async function speelgoedDataToevoegen(naam,prijs, producent) {
