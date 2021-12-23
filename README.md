@@ -21,9 +21,16 @@ Routes:
 1. Create
    1. Create producent
    2. Create speelgoed
+      This route allows you to add a new speelgoed element
+      The number "2" in the route is the relationship linked to the comapny who made the toy for the new speelgoed data element
+      The number "20" in the route is the price for the new speelgoed data element
+      The word "testspeelgoed" in the route is the name for the new speelgoed data element
+      localhost:6900/backend/createSpeelgoed/testspeelgoed/20/2
 
 2. Read
    1. Read producent
+      This route allows you to read all producenten from te database
+      localhost:6900/backend/producenten
    2. Read speelgoed
    
 3. Update
