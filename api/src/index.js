@@ -35,12 +35,11 @@ async function createTable() {
       }
     });
     if (alreadyCreatedTable) {
-      await createProducentenPostgressData();
-      for (let index = 0; index < 5; index++) {
-        producentDataToevoegen();
-      }
+      await producentDataToevoegen("Hasbro");
+      await producentDataToevoegen("777");
+      await producentDataToevoegen("Jumbo");
+      await speelgoedDataToevoegen("testspeemlgoed", 21, 1);
     }
-    producentDataToevoegen();
 }
 
 createTable();
@@ -82,6 +81,15 @@ bgRouter.route('/deleteProducenten/:producentId')
       res.send("Data verwijderen gelukt!")
 });
 
+//Create
+bgRouter.route('/createProducenten/:naam')
+    .post((req, res) => {
+      producentDataToevoegen(req.params.naam);
+      res.send("Data verwijderen gelukt!")
+});
+
+
+
 
 app.use('/backend', bgRouter);
 
@@ -104,8 +112,8 @@ async function producentDataOphalen() {
   return await pg.select('producentId', 'bedrijfsnaam').from('producenten');
 }
 
-async function producentDataToevoegen() {
-  return await pg.table('producenten').insert({bedrijfsnaam: "producent"});
+async function producentDataToevoegen(naam) {
+  return await pg.table('producenten').insert({bedrijfsnaam: naam});
 }
 
 async function producentDataAanpassen(producentId) {
@@ -121,8 +129,8 @@ async function speelgoedDataOphalen() {
   return await pg.select('speelgoedId', 'prijs').from('speelgoed');
 }
 
-async function speelgoedDataToevoegen() {
-  return await pg.table('speeldgoed').insert({naam: "speelgoed"});
+async function speelgoedDataToevoegen(naam,prijs, producent) {
+  return await pg.table('speelgoed').insert({naam: naam, prijs: prijs, bedrijfsnaam: producent});
 }
 
 async function speelgoedDataAanpassen(speelgoedId) {
@@ -132,3 +140,5 @@ async function speelgoedDataAanpassen(speelgoedId) {
 async function speelgoedDataVerwijderen(speelgoedId) {
   return await pg.table('speelgoed').where('speelgoedId', '=', speelgoedId).del();
 }
+
+//7acd9611-3801-4c3d-87fd-a321ba3d7ce9
