@@ -32,6 +32,8 @@ Routes:
       This route allows you to read all producenten from te database
       localhost:6900/backend/producenten
    2. Read speelgoed
+      This route allows you to read all speelgoed from te database
+      localhost:6900/backend/speelgoed
    
 3. Update
    1. Update producent
