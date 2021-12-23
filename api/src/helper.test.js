@@ -1,9 +1,8 @@
 const { test, expect } = require("@jest/globals");
 const { help } = require("yargs");
-const helpers = require("../database_test");
 
-const backendVariables = require("../index");
-const backendroutes = require("../index.js");
+const backendVariables = require("./index");
+const backendroutes = require("./index.js");
 const request = require('supertest');
 
 //Endpoint testing
