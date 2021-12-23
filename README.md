@@ -40,7 +40,7 @@ Routes:
    
 3. Update
    1. Update producent
-      This route allows you to update a speelgoed element
+      This route allows you to update a producent element
       The word "updatetest" in the route is the updated name for the an existing producent data element with id "1"
       localhost:6900/backend/updateProducenten/1/updatetest
    2. Update speelgoed
@@ -50,4 +50,10 @@ Routes:
 
 4. Delete
    1. Delete producent
+      This route allows you to delete a producent element
+      The number "4" in the route deletes the producent element with id "4"
+      localhost:6900/backend/deleteProducenten/4
    2. Delete speelgoed
+      This route allows you to delete a speelgoed element
+      The number "2" in the route deletes the speelgoed element with id "2"
+      localhost:6900/backend/deleteSpeelgoed/2
