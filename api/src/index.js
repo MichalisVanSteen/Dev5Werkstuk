@@ -85,9 +85,14 @@ bgRouter.route('/deleteProducenten/:producentId')
 bgRouter.route('/createProducenten/:naam')
     .post((req, res) => {
       producentDataToevoegen(req.params.naam);
-      res.send("Data verwijderen gelukt!")
+      res.send("Data toevoegen gelukt!")
 });
 
+bgRouter.route('/createSpeelgoed/:naam/:prijs/:producent')
+    .post((req, res) => {
+      speelgoedDataToevoegen(req.params.naam, req.params.prijs, req.params.producent);
+      res.send("Data toevoegen gelukt!")
+});
 
 
 
