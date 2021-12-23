@@ -20,6 +20,9 @@ Routes:
 
 1. Create
    1. Create producent
+      This route allows you to add a new producent element
+      The word "clubtoy" in the route is the name for the new producent data element
+      localhost:6900/backend/createProducenten/clubtoy
    2. Create speelgoed
       This route allows you to add a new speelgoed element
       The number "2" in the route is the relationship linked to the comapny who made the toy for the new speelgoed data element
@@ -37,9 +40,14 @@ Routes:
    
 3. Update
    1. Update producent
-      
+      This route allows you to update a speelgoed element
+      The word "updatetest" in the route is the updated name for the an existing producent data element with id "1"
+      localhost:6900/backend/updateProducenten/1/updatetest
    2. Update speelgoed
-   
+      This route allows you to update a speelgoed element
+      The number "69" in the route is the updated price for the an existing speelgoed data element with id "1"
+      localhost:6900/backend/updateSpeelgoed/1/69
+
 4. Delete
    1. Delete producent
    2. Delete speelgoed
